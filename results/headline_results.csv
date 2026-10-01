@@ -1,0 +1,9 @@
+condition,regime,mappo_pct,ippo_pct,change_pp
+honest_baseline,r7,68.3,52.0,16.3
+honest_baseline,r3,97.3,47.0,50.3
+random_noise_f0.5,r7,,,-9.3
+random_noise_f0.5,r3,,,-10.6
+misdirection_f0.5,r7,,,-19.6
+misdirection_f0.5,r3,,,-33.6
+silence_f0.5,r7,,,-9.4
+silence_f0.5,r3,,,-48.3
