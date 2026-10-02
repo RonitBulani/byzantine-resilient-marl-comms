@@ -11,6 +11,7 @@ class EnvState:
     obs: np.ndarray
     step: int
     grid_size: int
+    # Environment-provided true position used by the final team communication experiment.
     true_hider_pos: tuple[float, float]
 
 class BaseProtocol(ABC):

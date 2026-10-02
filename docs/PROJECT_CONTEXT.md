@@ -21,3 +21,13 @@ Copying the entire group repository into a personal portfolio would make authors
 The original repository remains the best place to inspect the whole project and its commit history:
 
 https://github.com/yshkrum/marl-byzantine-pursuit
+
+
+## Communication-signal caveat
+
+The final team implementation passed the true hider position into the
+communicating protocols through `EnvState.true_hider_pos`. The portfolio
+extract preserves this behaviour so that its code remains faithful to the
+experiment that generated the published team results.
+
+See `IMPLEMENTATION_LIMITATION.md` for the precise scope of this limitation.

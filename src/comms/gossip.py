@@ -16,6 +16,9 @@ class GossipProtocol(BaseProtocol):
         self._rng = np.random.default_rng(self._seed)
 
     def send(self, agent_id: str, state: EnvState) -> Message:
+        # Faithful to the final team experiment: communicating protocols
+        # use the environment-provided true_hider_pos (oracle-style signal),
+        # not the visibility-limited obs[2:4]. See docs/IMPLEMENTATION_LIMITATION.md.
         x, y = state.true_hider_pos
         return Message(agent_id, x, y, state.step)
 

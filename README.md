@@ -54,9 +54,9 @@ A no-communication baseline is also included in the interface module.
 
 ```mermaid
 flowchart LR
-    A[Agent observation] --> B[Protocol send]
+    A[Environment state] --> B[Protocol send]
     B --> C{Byzantine?}
-    C -- No --> D[Honest message]
+    C -- No --> D[Uncorrupted message]
     C -- Yes --> E[Corrupt or suppress message]
     D --> F[Protocol receive / aggregate]
     E --> F
@@ -64,7 +64,29 @@ flowchart LR
     G --> H[Next agent observation]
 ```
 
-Movement remains unchanged. Byzantine behaviour acts only on outgoing communication, making degradation attributable to information quality rather than an altered movement policy.
+Movement remains unchanged. Byzantine behaviour acts only on outgoing
+communication, making degradation attributable to the communication channel
+rather than an altered movement policy.
+
+### Important implementation detail
+
+In the final team implementation, the communicating protocols
+(`Broadcast`, `Gossip`, `TrimmedMean`, and `Reputation`) construct their honest
+message from `EnvState.true_hider_pos`. The environment populates that field
+directly from the hider's true position.
+
+That means the reported experiments use an **oracle-style shared position
+channel**: an honest sender can transmit the true hider position even when its
+own visibility-limited observation would not contain that position. This is
+faithful to the code that produced the team results, so the portfolio extract
+preserves it rather than silently changing the experiment.
+
+The results should therefore be interpreted as a study of Byzantine corruption
+and robust aggregation under this oracle-style communication channel, **not**
+as evidence of performance under purely local sensing.
+
+`NoneProtocol` remains the local-observation/no-communication control in this
+standalone extract.
 
 ## Headline results from the full team experiment
 
@@ -88,7 +110,10 @@ The original project evaluated frozen MAPPO and iPPO checkpoints across 30,000 e
 
 The narrow-observability regime was particularly sensitive to information loss: silent communication reduced the MAPPO capture rate by roughly 48 percentage points at `f=0.5`. Spoofing had little effect in this implementation because the policy consumed messages through fixed observation slots rather than using the transmitted sender identity as a decision feature.
 
-These values are reproduced from the final team repository's documented evaluation summary. See [`results/RESULTS.md`](results/RESULTS.md) for context and limitations.
+These values are reproduced from the final team repository's documented
+evaluation summary. See [`results/RESULTS.md`](results/RESULTS.md) and
+[`docs/IMPLEMENTATION_LIMITATION.md`](docs/IMPLEMENTATION_LIMITATION.md) for
+the experiment-specific caveat around the communication signal.
 
 ## Repository structure
 
@@ -111,7 +136,8 @@ byzantine-resilient-marl-comms/
 │   └── RESULTS.md
 ├── docs/
 │   ├── PROJECT_CONTEXT.md
-│   └── MY_CONTRIBUTION.md
+│   ├── MY_CONTRIBUTION.md
+│   └── IMPLEMENTATION_LIMITATION.md
 ├── requirements.txt
 ├── .gitignore
 └── NOTICE.md

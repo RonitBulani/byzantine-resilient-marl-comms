@@ -30,7 +30,16 @@ These values are taken from the final documented summary in the original team re
 
 ## Interpretation
 
-The strongest degradation in the narrow-observability condition came from message suppression: when agents depended more heavily on peer information, silence removed information that the local observation could not replace.
+The strongest degradation in the narrow-observability condition came from
+message suppression: silence removed information carried through the
+communication channel.
+
+A key implementation caveat is that the communicating protocols in the final
+team code used the environment-provided `true_hider_pos` when constructing
+honest messages. The experiment therefore used an oracle-style shared position
+signal rather than a strictly local-sensing communication channel. This is
+documented in `docs/IMPLEMENTATION_LIMITATION.md` and should be kept in mind
+when interpreting the observability comparison.
 
 Spoofing produced little degradation in the final implementation because the receiving policy consumed peer information through fixed observation slots rather than relying directly on the transmitted sender identity. This is an implementation-specific result, not a general claim that identity spoofing is harmless in MARL systems.
 

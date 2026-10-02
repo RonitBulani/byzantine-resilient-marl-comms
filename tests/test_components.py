@@ -7,6 +7,7 @@ from src.byzantine.subtypes import (
     SpoofingByzantine, SilentByzantine,
 )
 from src.comms.broadcast import BroadcastProtocol
+from src.comms.interface import EnvState
 from src.comms.gossip import GossipProtocol
 from src.comms.trimmed_mean import TrimmedMeanProtocol
 from src.comms.reputation import ReputationProtocol
@@ -58,3 +59,18 @@ def test_reputation_penalises_outlier():
 def test_broadcast_skips_silent_entries():
     out = BroadcastProtocol().receive([msgs()[0], None])
     assert list(out) == ["s0"]
+
+
+def test_broadcast_preserves_oracle_signal_used_by_team_experiment():
+    # Local observation says the hider is unseen, while true_hider_pos contains
+    # the environment-provided position. The final team experiment transmitted
+    # the latter; this test intentionally locks that documented behaviour.
+    state = EnvState(
+        obs=np.array([0.1, 0.1, -1.0, -1.0], dtype=float),
+        step=3,
+        grid_size=16,
+        true_hider_pos=(0.8, 0.6),
+    )
+    msg = BroadcastProtocol().send("s0", state)
+    assert msg.believed_hider_x == pytest.approx(0.8)
+    assert msg.believed_hider_y == pytest.approx(0.6)

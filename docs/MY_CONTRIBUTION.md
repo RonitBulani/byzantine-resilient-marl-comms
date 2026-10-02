@@ -23,3 +23,12 @@ My responsibility was the communication/adversary layer used by the MARL experim
 The portfolio repository deliberately does not present the pursuit environment, MAPPO implementation, iPPO implementation, reward design or training pipeline as my individual work.
 
 A small compatibility module (`src/common.py`) has been added specifically for this standalone extract. It replaces shared team environment types that the original communication modules imported.
+
+
+## Portfolio transparency note
+
+A later portfolio review identified that the final integrated team environment
+supplied `true_hider_pos` to the communicating protocols. I have documented
+that experiment-level limitation rather than rewriting the protocol behaviour,
+because changing it would no longer match the experiment that produced the
+reported team results.
